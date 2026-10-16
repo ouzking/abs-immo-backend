@@ -1,0 +1,52 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  test:
+    name: Migrations, RLS et Edge Functions
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Démarrer Supabase (local, éphémère)
+        run: npx supabase start -x studio,imgproxy,vector,logflare,supavisor
+
+      - name: Lint du schéma
+        run: npx supabase db lint --local --level warning --fail-on warning
+
+      - name: Types générés à jour
+        run: |
+          npm run types:gen
+          git diff --exit-code src/types/database.types.ts
+
+      - name: Vérification TypeScript
+        run: npx tsc --noEmit
+
+      - name: Vérification Deno des Edge Functions
+        working-directory: supabase/functions
+        run: npx --yes deno@2 check submit-inquiry/index.ts submit-viewing-request/index.ts admin-users/index.ts
+
+      - name: Tests base de données (pgTAP)
+        run: npx supabase test db
+
+      - name: Tests unitaires
+        run: npm run test:unit
+
+      - name: Tests d'intégration
+        run: npm run test:integration
+
+      - name: Arrêt
+        if: always()
+        run: npx supabase stop --no-backup
