@@ -78,6 +78,14 @@ docs/                      documentation
 Projet `abs-immo-backend`, réf. `sasssoloprjakfysajvt`, PostgreSQL 17, eu-west-1.
 Variables : voir [.env.example](.env.example). Aucune clé secrète ne doit être versionnée.
 
+## Contribuer
+
+* `main` est protégée : toute modification passe par une branche (`feat/…`, `fix/…`, `chore/…`) et une pull request.
+* La CI (lint, types, `tsc`, `deno check`, pgTAP, unitaires, intégration) doit être verte ; fusion par squash.
+* Messages de commit au format [Conventional Commits](https://www.conventionalcommits.org/fr/) (`feat(db): …`, `fix(functions): …`).
+* Une migration déployée n'est jamais modifiée : on en écrit une nouvelle.
+* Déploiement sur Supabase après fusion, selon [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md).
+
 ## Historique
 
 | Version | Date | Changements |
