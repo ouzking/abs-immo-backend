@@ -1,0 +1,11 @@
+# Fins de ligne normalisées (LF) : diffs propres entre Windows et la CI Linux.
+* text=auto eol=lf
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
+*.pdf binary
+
+# Fichier généré : masqué dans les diffs de revue.
+src/types/database.types.ts linguist-generated=true -diff
+package-lock.json linguist-generated=true

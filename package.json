@@ -1,0 +1,37 @@
+{
+  "name": "@abs-immo/backend",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Backend Supabase d'ABS IMMO & SERVICES : migrations, sécurité RLS, Edge Functions, types et contrats d'intégration.",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "exports": {
+    "./types": "./src/types/index.ts"
+  },
+  "scripts": {
+    "supabase": "supabase",
+    "db:start": "supabase start -x studio,imgproxy,vector,logflare,supavisor",
+    "db:stop": "supabase stop",
+    "db:reset": "supabase db reset --local",
+    "db:lint": "supabase db lint --local --level warning",
+    "db:diff": "supabase db diff --local",
+    "types:gen": "supabase gen types typescript --local --schema public > src/types/database.types.ts && oxfmt src/types/database.types.ts",
+    "types:check": "tsc --noEmit",
+    "test": "npm run test:db && npm run test:unit && npm run test:integration",
+    "test:db": "supabase test db",
+    "test:unit": "vitest run tests/unit",
+    "test:integration": "vitest run tests/integration",
+    "deploy:db": "supabase db push --linked",
+    "deploy:functions": "supabase functions deploy submit-inquiry submit-viewing-request admin-users --use-api"
+  },
+  "devDependencies": {
+    "@supabase/supabase-js": "^2.118.0",
+    "@types/node": "^22.20.5",
+    "oxfmt": "^0.73.0",
+    "supabase": "^2.121.0",
+    "typescript": "^5.9.3",
+    "vitest": "^5.0.5"
+  }
+}

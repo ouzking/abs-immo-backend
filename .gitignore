@@ -1,0 +1,29 @@
+# Dépendances / build
+node_modules/
+dist/
+coverage/
+
+# Secrets — ne JAMAIS versionner
+.env
+.env.*
+!.env.example
+supabase/.env
+supabase/functions/.env
+*.pem
+*.key
+
+# Supabase (état local)
+supabase/.branches
+supabase/.temp
+
+# Sauvegardes locales (contiennent des données personnelles)
+backups/
+*.dump
+*.backup
+
+# Divers
+.DS_Store
+Thumbs.db
+*.log
+.vscode/*
+!.vscode/extensions.json
