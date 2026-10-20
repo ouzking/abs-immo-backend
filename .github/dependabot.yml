@@ -15,6 +15,10 @@ updates:
     ignore:
       - dependency-name: supabase
         update-types: [version-update:semver-major, version-update:semver-minor]
+      # Types alignés sur la version majeure du runtime (Node 22 en CI) :
+      # à monter en même temps que node-version dans ci.yml.
+      - dependency-name: "@types/node"
+        update-types: [version-update:semver-major]
     commit-message:
       prefix: "chore(deps)"
 

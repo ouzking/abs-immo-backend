@@ -43,6 +43,11 @@ describe("Lecture publique des annonces", () => {
     const text = await anon.rpc("search_properties", { p_query: "piscine almadies" }).select("title");
     expect(text.data!.map((p) => p.title)).toContain("Villa contemporaine avec piscine aux Almadies");
 
+    // 1.1.0 : une requête anglaise trouve les annonces (libellé anglais du type)
+    const en = await anon.rpc("search_properties", { p_query: "apartment" }).select("property_type,property_type_label_en,has_english");
+    expect(en.data!.length).toBeGreaterThan(0);
+    expect(en.data!.every((p) => p.property_type === "apartment" && p.property_type_label_en === "Apartment")).toBe(true);
+
     const bad = await anon.rpc("search_properties", { p_sort: "nope" });
     expect(bad.error?.code).toBe("22023");
   });

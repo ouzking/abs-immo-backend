@@ -102,6 +102,12 @@ begin
   end loop;
 end $$;
 
+-- Traduction anglaise de démonstration (contrat 1.1.0)
+update public.properties
+   set title_en = 'Contemporary villa with swimming pool in Almadies',
+       short_description_en = 'Architect-designed villa with pool, landscaped garden and open views.'
+ where title like 'Villa contemporaine%';
+
 -- Quelques prospects
 select public.submit_inquiry(p_full_name => 'Cheikh Mbaye', p_phone => '77 123 45 67', p_email => 'cheikh@example.sn',
   p_message => 'Bonjour, la villa est-elle toujours disponible ?',
