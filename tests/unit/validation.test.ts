@@ -7,7 +7,7 @@ import {
 } from "../../supabase/functions/_shared/validation.ts";
 import { agentSlug, isStrongPassword, validateAdminAction } from "../../supabase/functions/_shared/admin-validation.ts";
 import { corsHeaders, isOriginAllowed, mapDbError } from "../../supabase/functions/_shared/http.ts";
-import { formatPriceXof, propertyFilePath } from "../../src/types/contracts.ts";
+import { formatPriceXof, localized, propertyFilePath } from "../../src/types/contracts.ts";
 
 const PROPERTY_ID = "3f2b8c1e-4d5a-4b6c-8d7e-9f0a1b2c3d4e";
 
@@ -196,6 +196,12 @@ describe("contracts", () => {
   it("construit un chemin de photo conforme", () => {
     expect(propertyFilePath(PROPERTY_ID, "image/webp", "abc")).toBe(`${PROPERTY_ID}/abc.webp`);
     expect(() => propertyFilePath(PROPERTY_ID, "image/svg+xml")).toThrow();
+  });
+  it("localise avec repli sur le français", () => {
+    expect(localized("Villa", "Villa EN", "en")).toBe("Villa EN");
+    expect(localized("Villa", null, "en")).toBe("Villa");
+    expect(localized("Villa", "Villa EN", "fr")).toBe("Villa");
+    expect(localized("Villa", "Villa EN", "wo")).toBe("Villa");
   });
   it("formate les prix en FCFA", () => {
     expect(formatPriceXof(150000000)).toBe("150 000 000 FCFA");

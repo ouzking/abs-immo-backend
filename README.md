@@ -29,7 +29,7 @@ Ce dépôt est **l'unique source du schéma**. Les applications React ne créent
 npm ci
 npm run db:start     # pile Supabase locale (Docker), ports 546xx
 npm run db:reset     # migrations + données de démonstration
-npm test             # 294 tests pgTAP + tests unitaires + tests d'intégration
+npm test             # 313 tests pgTAP + tests unitaires + tests d'intégration
 ```
 
 Comptes de démonstration locaux : voir `supabase/seed.sql`.
@@ -90,4 +90,5 @@ Variables : voir [.env.example](.env.example). Aucune clé secrète ne doit êtr
 
 | Version | Date | Changements |
 |---|---|---|
+| 1.1.0 | 2026-10-20 | Annonces bilingues FR/EN (champs anglais, libellés anglais des types et équipements, recherche bilingue), rétrocompatible |
 | 1.0.0 | 2026-10-16 | Version initiale : schéma complet, RLS, Storage, Edge Functions, statistiques, contrat d'intégration |
