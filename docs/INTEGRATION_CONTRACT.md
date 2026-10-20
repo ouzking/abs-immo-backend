@@ -1,6 +1,6 @@
 # Contrat d'intégration — ABS IMMO & SERVICES
 
-**Version du contrat : 1.0.0** (`CONTRACT_VERSION` dans `src/types/contracts.ts`)
+**Version du contrat : 1.1.0** (`CONTRACT_VERSION` dans `src/types/contracts.ts`)
 Public visé : équipes `abs-immo-frontend` (site public) et `abs-immo-backoffice` (back-office).
 
 > Le dépôt `abs-immo-backend` est **l'unique responsable du schéma**. Les applications React ne créent
@@ -92,6 +92,24 @@ Champs notables :
 * `address_line` : non nul uniquement si `exact`.
 * `agent` : `null` si l'agent n'est pas public → afficher les coordonnées de l'agence (`agency_settings`).
 * `commercial_status` : `available | reserved | sold | rented` → badge.
+
+### 2.3 bis Annonces en anglais (1.1.0)
+
+Colonnes ajoutées à `public_properties` (et au détail `get_public_property`) :
+
+| Colonne | Contenu |
+|---|---|
+| `title_en`, `short_description_en`, `description_en` | Traductions facultatives (`null` si non traduites) |
+| `seo_title_en`, `seo_description_en` | Métadonnées SEO anglaises |
+| `property_type_label_en` | Libellé anglais du type (`Apartment`, `Land`…) |
+| `has_english` | `true` si l'annonce a un titre anglais |
+
+* **Repli obligatoire** : si un champ `_en` est `null`, afficher le français. Utilitaire : `localized(fr, en, locale)`.
+* Cartes en anglais : `.select(PROPERTY_CARD_COLUMNS + "," + PROPERTY_CARD_COLUMNS_EN)`.
+* Équipements du détail : `label_en` ; filtres (`get_public_filters`) : `label_en`, `label_plural_en`.
+* `search_properties` cherche **dans les deux langues** avec le même paramètre `p_query` (« swimming pool » comme « piscine »). La signature est inchangée.
+* Le wolof utilise le contenu français. Les noms de lieux ne sont pas traduits.
+* Back-office : les agents saisissent `title_en`, `short_description_en`, `description_en`, `seo_title_en`, `seo_description_en` comme les autres champs (mêmes droits). `title_en` : 5–160 caractères.
 
 ### 2.4 Photos (bucket privé `property-images`)
 
@@ -333,3 +351,10 @@ Edge Functions : `{ error: { code, message, fields? } }` (`ApiErrorCode`).
 * Les valeurs d'énumérations peuvent s'enrichir : prévoir un affichage par défaut.
 * Chaque migration régénère `src/types/database.types.ts` (vérifié en CI).
 * Changelog : section « Historique » du README.
+
+### Journal des versions du contrat
+
+| Version | Changements | Action côté React |
+|---|---|---|
+| 1.1.0 | Annonces bilingues : colonnes `*_en`, `has_english`, `property_type_label_en` ; `label_en` des équipements et types ; recherche FR+EN | Facultative : mettre à jour les types (`#v1.1.0`) pour utiliser l'anglais |
+| 1.0.0 | Version initiale | — |
