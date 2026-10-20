@@ -12,7 +12,7 @@
 // =============================================================================
 import type { Database } from "./database.types.ts";
 
-export const CONTRACT_VERSION = "1.0.0";
+export const CONTRACT_VERSION = "1.1.0";
 
 type PublicSchema = Database["public"];
 export type Tables<T extends keyof PublicSchema["Tables"]> = PublicSchema["Tables"][T]["Row"];
@@ -100,6 +100,9 @@ export const PROPERTY_CARD_COLUMNS =
   "price_amount,currency_code,price_on_request,rent_period,surface_area,surface_unit,bedrooms,bathrooms," +
   "city_name,neighborhood_name,commercial_status,is_featured,published_at,cover_image_path,cover_image_alt,image_count";
 
+/** Colonnes anglaises à ajouter à une carte pour le site en anglais (1.1.0). */
+export const PROPERTY_CARD_COLUMNS_EN = "title_en,short_description_en,property_type_label_en,has_english";
+
 export type PropertyCard = Pick<
   PublicProperty,
   | "id" | "reference" | "slug" | "title" | "short_description" | "property_type" | "property_type_label"
@@ -126,14 +129,21 @@ export type PublicPropertyDetail = Omit<PublicProperty, "search_vector" | "agent
     width: number | null;
     height: number | null;
   }>;
-  amenities: Array<{ code: string; label: string; category: string; icon: string | null }>;
+  amenities: Array<{ code: string; label: string; label_en: string | null; category: string; icon: string | null }>;
   features: Array<{ label: string; value: string | null }>;
 };
 
 /** Réponse de `get_public_filters`. */
 export interface PublicFilters {
   transaction_types: Array<{ value: TransactionType; count: number }>;
-  property_types: Array<{ code: string; label: string; label_plural: string; count: number }>;
+  property_types: Array<{
+    code: string;
+    label: string;
+    label_plural: string;
+    label_en: string | null;
+    label_plural_en: string | null;
+    count: number;
+  }>;
   cities: Array<{ id: string; name: string; slug: string; region_name: string; count: number }>;
   neighborhoods: Array<{ id: string; name: string; slug: string; city_id: string; count: number }>;
   price_ranges: Partial<Record<TransactionType, { min: number; max: number }>>;
@@ -349,6 +359,19 @@ export function propertyFilePath(propertyId: string, mimeType: string, fileId: s
   const ext = EXT_BY_MIME[mimeType];
   if (!ext) throw new Error(`Type de fichier non pris en charge : ${mimeType}`);
   return `${propertyId}/${fileId}.${ext}`;
+}
+
+// -----------------------------------------------------------------------------
+// Internationalisation (1.1.0)
+// -----------------------------------------------------------------------------
+export type SiteLocale = "fr" | "en" | "wo";
+
+/**
+ * Texte localisé avec repli sur le français : les champs *_en sont facultatifs.
+ * Le wolof utilise le contenu français tant qu'aucune traduction n'existe.
+ */
+export function localized(fr: string | null, en: string | null | undefined, locale: SiteLocale): string | null {
+  return locale === "en" && en ? en : fr;
 }
 
 /** Formate un prix en FCFA : 150000000 -> "150 000 000 FCFA". */
