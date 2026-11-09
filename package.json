@@ -27,11 +27,11 @@
     "deploy:functions": "supabase functions deploy submit-inquiry submit-viewing-request admin-users --use-api"
   },
   "devDependencies": {
-    "@supabase/supabase-js": "^2.118.0",
+    "@supabase/supabase-js": "^2.119.0",
     "@types/node": "^22.20.5",
-    "oxfmt": "^0.73.0",
+    "oxfmt": "^0.76.0",
     "supabase": "^2.121.0",
     "typescript": "^7.0.2",
-    "vitest": "^5.0.5"
+    "vitest": "^5.1.0"
   }
 }
